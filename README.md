@@ -28,7 +28,7 @@
 ## Install
 
 ```console
-go get -u github.com/garrettladley/fiberpaginate
+go get -u github.com/garrettladley/fiberpaginate/v2
 ```
 
 ## Config
