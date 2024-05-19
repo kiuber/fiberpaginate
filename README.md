@@ -50,7 +50,7 @@ package main
 import (
 	"log"
 
-	"github.com/garrettladley/fiberpaginate"
+	"github.com/garrettladley/fiberpaginate/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -91,7 +91,7 @@ package main
 import (
 	"log"
 
-	"github.com/garrettladley/fiberpaginate"
+	"github.com/garrettladley/fiberpaginate/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -132,7 +132,7 @@ package main
 import (
 	"log"
 
-	"github.com/garrettladley/fiberpaginate"
+	"github.com/garrettladley/fiberpaginate/v2"
 	"github.com/gofiber/fiber/v2"
 )
 
