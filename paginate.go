@@ -1,7 +1,7 @@
 package fiberpaginate
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // The contextKey type is unexported to prevent collisions with context keys defined in
@@ -16,14 +16,14 @@ const (
 func New(config ...Config) fiber.Handler {
 	cfg := configDefault(config...)
 
-	return func(c *fiber.Ctx) error {
+	return func(c fiber.Ctx) error {
 		if cfg.Next != nil && cfg.Next(c) {
 			return c.Next()
 		}
 
-		page := c.QueryInt(cfg.PageKey, cfg.DefaultPage)
+		page := fiber.Query[int](c, cfg.PageKey, cfg.DefaultPage)
 
-		limit := c.QueryInt(cfg.LimitKey, cfg.DefaultLimit)
+		limit := fiber.Query[int](c, cfg.LimitKey, cfg.DefaultLimit)
 
 		c.Locals(pageInfoKey, NewPageInfo(page, limit))
 
@@ -34,7 +34,7 @@ func New(config ...Config) fiber.Handler {
 // FromContext returns the PageInfo from the context.
 // If there is a PageInfo in the context, it is returned and the boolean is true.
 // If there is no PageInfo in the context, nil is returned and the boolean is false.
-func FromContext(c *fiber.Ctx) (*PageInfo, bool) {
+func FromContext(c fiber.Ctx) (*PageInfo, bool) {
 	if fiberpaginate, ok := c.Locals(pageInfoKey).(*PageInfo); ok {
 		return fiberpaginate, true
 	}
