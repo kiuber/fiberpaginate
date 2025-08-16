@@ -2,10 +2,11 @@ package fiberpaginate
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/require"
 	"io"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/gofiber/fiber/v3"
 )
@@ -341,4 +342,48 @@ func Test_PaginateFromContextWithoutNew(t *testing.T) {
 	resp, err := app.Test(httptest.NewRequest(fiber.MethodGet, "/", nil))
 	require.Equal(t, nil, err)
 	require.Equal(t, fiber.StatusBadRequest, resp.StatusCode)
+}
+
+// go test -run Test_PaginateFromContextSafeWithoutNew
+func Test_PaginateFromContextSafeWithoutNew(t *testing.T) {
+	t.Parallel()
+	app := fiber.New()
+
+	app.Get("/", func(c fiber.Ctx) error {
+		pageInfo, ok := FromContextSafe(c)
+		if !ok {
+			return fiber.ErrBadRequest
+		}
+
+		return c.JSON(Response{
+			Page:  pageInfo.Page,
+			Limit: pageInfo.Limit,
+		})
+	})
+
+	resp, err := app.Test(httptest.NewRequest(fiber.MethodGet, "/", nil))
+	require.Equal(t, nil, err)
+	require.Equal(t, fiber.StatusOK, resp.StatusCode)
+}
+
+// go test -run Test_PaginateFromContextSafeWithNil
+func Test_PaginateFromContextSafeWithNil(t *testing.T) {
+	t.Parallel()
+	app := fiber.New()
+
+	app.Get("/", func(c fiber.Ctx) error {
+		pageInfo, ok := FromContextSafe(nil)
+		if !ok {
+			return fiber.ErrBadRequest
+		}
+
+		return c.JSON(Response{
+			Page:  pageInfo.Page,
+			Limit: pageInfo.Limit,
+		})
+	})
+
+	resp, err := app.Test(httptest.NewRequest(fiber.MethodGet, "/", nil))
+	require.Equal(t, nil, err)
+	require.Equal(t, fiber.StatusOK, resp.StatusCode)
 }

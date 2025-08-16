@@ -40,3 +40,12 @@ func FromContext(c fiber.Ctx) (*PageInfo, bool) {
 	}
 	return nil, false
 }
+
+// FromContextSafe returns the PageInfo from the context.
+// If there is no PageInfo in the context, a default PageInfo is returned and the boolean is true.
+func FromContextSafe(c fiber.Ctx) (*PageInfo, bool) {
+	if c == nil || c.Locals(pageInfoKey) == nil {
+		return NewPageInfo(ConfigDefault.DefaultPage, ConfigDefault.DefaultLimit), true
+	}
+	return FromContext(c)
+}
