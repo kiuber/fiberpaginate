@@ -1,4 +1,4 @@
-module github.com/kiuber/fiberpaginate/v3
+module github.com/garrettladley/fiberpaginate/v3
 
 go 1.23
 
